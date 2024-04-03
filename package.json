@@ -1,0 +1,17 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "chat, hexlet project",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build --prefix chat",
+    "start": "start-server -a localhost -s ./chat/build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd chat && npm ci"
+  },
+  "author": "Ivan Shadrin",
+  "license": "ISC",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.3"
+  }
+}
