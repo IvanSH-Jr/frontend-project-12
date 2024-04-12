@@ -1,6 +1,7 @@
 import { Formik, Field, Form } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
+import loginPicture from '../assets/login.jpg';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -12,6 +13,7 @@ const SignupSchema = Yup.object().shape({
 
 const LoginForm = () => (
   <div>
+    <h1 className="text-muted">Войти</h1>
     <Formik
       initialValues={{
         username: '',
@@ -51,9 +53,25 @@ const LoginForm = () => (
 );
 
 const Login = () => (
-  <div>
-    <h1 className="text-muted">Войти</h1>
-    <LoginForm />
+  <div className="col-12 col-md-8 col-xxl-6">
+    <div className="card shadow-sm">
+      <div className="card-body row p-5">
+        <div className="card shadow-sm">
+          <div className="card-body row p-5">
+            <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+              <img src={loginPicture} width={200} height={200} className="rounded-circle" alt="Авторизация. Вход." />
+            </div>
+            <LoginForm />
+          </div>
+          <div className="card-footer p-4">
+            <div className="text-center">
+              <span>Нет аккаунта?</span>
+              <a href="/signup">Регистрация</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 );
 
