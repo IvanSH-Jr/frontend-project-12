@@ -5,7 +5,6 @@ const MainPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(navigate);
     if (!localStorage.getItem('token')) navigate('/login');
   });
 
