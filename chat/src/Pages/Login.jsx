@@ -1,7 +1,10 @@
-import { Formik, Field, Form } from 'formik';
+import { Formik, Form } from 'formik';
+import {
+  FormControl, Button, FormFloating, FormLabel,
+} from 'react-bootstrap';
 import axios from 'axios';
 import * as Yup from 'yup';
-import loginPicture from '../assets/login.jpg';
+import LoginComponent from '../componentsHTML/LoginComponent';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -12,67 +15,57 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = () => (
-  <div>
-    <h1 className="text-muted">Войти</h1>
-    <Formik
-      initialValues={{
-        username: '',
-        password: '',
-      }}
-      validationSchema={SignupSchema}
-      onSubmit={async ({ username, password }) => {
-        await axios
-          .post('/api/v1/login', { username, password })
-          .then((res) => {
-            const { data } = res;
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('username', data.username);
-          });
-      }}
-    >
-      {({ errors, touched }) => (
-        <Form>
-          <Field name="username" />
-          {errors.username && touched.username ? (
-            <div>{errors.username}</div>
-          ) : null}
-          <Field
-            id="password"
-            name="password"
-            placeholder="Пароль"
-            type="password"
+  <Formik
+    initialValues={{
+      username: '',
+      password: '',
+    }}
+    validationSchema={SignupSchema}
+    onSubmit={async ({ username, password }) => {
+      await axios
+        .post('/api/v1/login', { username, password })
+        .then((res) => {
+          const { data } = res;
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('username', data.username);
+        });
+    }}
+  >
+    {({ values, handleChange }) => (
+      <Form className="col-12 col-md-6 mt-3 mt-mb-0">
+        <h1 className="text-center mb-4">Войти</h1>
+        <FormFloating className="mb-3">
+          <FormControl
+            name="username"
+            id="username"
+            value={values.username}
+            onChange={handleChange}
+            autoFocus
           />
-          {errors.password && touched.password ? (
-            <div>{errors.password}</div>
-          ) : null}
-          <button type="submit" className="">Submit</button>
-        </Form>
-      )}
-    </Formik>
-  </div>
+          <FormLabel htmlFor="username">Ваш ник</FormLabel>
+        </FormFloating>
+        <FormFloating className="mb-3">
+          <FormControl
+            type="password"
+            name="password"
+            id="password"
+            value={values.password}
+            onChange={handleChange}
+          />
+          <FormLabel htmlFor="password">Пароль</FormLabel>
+        </FormFloating>
+        <Button type="submit" variant="outline-primary" className="w-100">
+          Войти
+        </Button>
+      </Form>
+    )}
+  </Formik>
 );
 
 const Login = () => (
-  <div className="col-12 col-md-8 col-xxl-6">
-    <div className="card shadow-sm">
-      <div className="card-body row p-5">
-        <div className="card shadow-sm">
-          <div className="card-body row p-5">
-            <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-              <img src={loginPicture} width={200} height={200} className="rounded-circle" alt="Авторизация. Вход." />
-            </div>
-            <LoginForm />
-          </div>
-          <div className="card-footer p-4">
-            <div className="text-center">
-              <span>Нет аккаунта?</span>
-              <a href="/signup">Регистрация</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <LoginComponent>
+    <LoginForm />
+  </LoginComponent>
 );
 
 export default Login;
