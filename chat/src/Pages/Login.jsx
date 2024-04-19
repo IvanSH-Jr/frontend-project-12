@@ -22,6 +22,21 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const authData = useSelector((state) => state.auth);
   if (authData.token && authData.username) navigate('/');
+
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    console.log(values);
+    console.log(setErrors);
+    console.log(setSubmitting);
+    const { username, password } = values;
+    await axios
+      .post('/api/v1/login', { username, password })
+      .then((res) => {
+        const { data } = res;
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        dispatch(setUserAuth({ token: data.token, username: data.username }));
+      });
+  };
   return (
     <Formik
       initialValues={{
@@ -29,16 +44,7 @@ const LoginForm = () => {
         password: '',
       }}
       validationSchema={SignupSchema}
-      onSubmit={async ({ username, password }) => {
-        await axios
-          .post('/api/v1/login', { username, password })
-          .then((res) => {
-            const { data } = res;
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('username', data.username);
-            dispatch(setUserAuth({ token: data.token, username: data.username }));
-          });
-      }}
+      onSubmit={handleSubmit}
     >
       {({ values, handleChange }) => (
         <Form className="col-12 col-md-6 mt-3 mt-mb-0">
