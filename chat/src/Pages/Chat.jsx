@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 
-const MainPage = () => {
+const Chat = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,9 +10,10 @@ const MainPage = () => {
 
   return (
     <div className="text-center mt-5">
-      <h1 className="text-muted">MainPage</h1>
+      <h1 className="text-muted">Chat</h1>
+      <Outlet />
     </div>
   );
 };
 
-export default MainPage;
+export default Chat;
