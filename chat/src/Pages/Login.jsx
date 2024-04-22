@@ -1,6 +1,6 @@
 import { Formik, Form } from 'formik';
 import {
-  FormControl, Button, FormFloating, FormLabel,
+  FormControl, Button, FormFloating, FormLabel, FormGroup,
 } from 'react-bootstrap';
 import axios from 'axios';
 import * as Yup from 'yup';
@@ -11,10 +11,10 @@ import LoginComponent from '../components/LoginComponent.jsx';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
-    .min(3, 'Минимум 2 буквы')
+    .min(4, 'Минимум 4 буквы')
     .max(50, 'Максимум 50 букв')
     .required('Обязательное поле'),
-  password: Yup.string().min(3, 'Минимум 2 буквы').required('Обязательное поле'),
+  password: Yup.string().min(3, 'Минимум 3 буквы').required('Обязательное поле'),
 });
 
 const LoginForm = () => {
@@ -23,19 +23,17 @@ const LoginForm = () => {
   const authData = useSelector((state) => state.auth);
   if (authData.token && authData.username) navigate('/');
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    console.log(values);
-    console.log(setErrors);
-    console.log(setSubmitting);
-    const { username, password } = values;
+  const handleSubmit = async ({ username, password }, { setSubmitting, setErrors }) => {
     await axios
       .post('/api/v1/login', { username, password })
       .then((res) => {
         const { data } = res;
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
+        setSubmitting(true);
         dispatch(setUserAuth({ token: data.token, username: data.username }));
-      });
+      })
+      .catch((err) => setErrors(err));
   };
   return (
     <Formik
@@ -46,7 +44,12 @@ const LoginForm = () => {
       validationSchema={SignupSchema}
       onSubmit={handleSubmit}
     >
-      {({ values, handleChange }) => (
+      {({
+        values,
+        handleChange,
+        errors,
+        touched,
+      }) => (
         <Form className="col-12 col-md-6 mt-3 mt-mb-0">
           <h1 className="text-center mb-4">Войти</h1>
           <FormFloating className="mb-3">
@@ -55,6 +58,7 @@ const LoginForm = () => {
               id="username"
               value={values.username}
               onChange={handleChange}
+              isInvalid={touched.username && !!errors.username}
               autoFocus
             />
             <FormLabel htmlFor="username">Ваш ник</FormLabel>
@@ -66,8 +70,10 @@ const LoginForm = () => {
               id="password"
               value={values.password}
               onChange={handleChange}
+              isInvalid={touched.password && !!errors.password}
             />
             <FormLabel htmlFor="password">Пароль</FormLabel>
+            <FormGroup className="invalid-tooltip">{errors.password}</FormGroup>
           </FormFloating>
           <Button type="submit" variant="outline-primary" className="w-100">
             Войти
