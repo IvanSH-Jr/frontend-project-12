@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const channelsApi = createApi({
   reducerPath: 'channels',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/v1/channels' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/api/v1/channels', prepareHeaders:  }),
   endpoints: (builder) => ({
     getChannels: builder.query({
       query: () => '',
@@ -15,6 +15,9 @@ export const channelsApi = createApi({
         method: 'POST',
         body: channel,
       }),
+    }),
+    editChannel: builder.mutation({
+      query: (id)
     }),
     removeChannel: builder.mutation({
       query: (id) => ({

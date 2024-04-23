@@ -4,8 +4,7 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserAuth } from '../store/slices/authSlice.js';
 import LoginComponent from '../components/LoginComponent.jsx';
 
@@ -18,10 +17,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authData = useSelector((state) => state.auth);
-  if (authData.token && authData.username) navigate('/');
 
   const handleSubmit = async ({ username, password }, { setSubmitting, setErrors }) => {
     await axios

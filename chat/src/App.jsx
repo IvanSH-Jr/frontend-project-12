@@ -14,6 +14,7 @@ import NavComponent from './components/NavComponent.jsx';
 
 const PrivateOutlet = () => {
   const { token } = useSelector((state) => state.auth);
+  console.log(token);
   return token ? <Outlet /> : <Navigate to={routes.login()} />;
 };
 
