@@ -4,9 +4,11 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserAuth } from '../store/slices/authSlice.js';
 import LoginComponent from '../components/LoginComponent.jsx';
+import routes from '../routes/routes.js';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -17,6 +19,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleSubmit = async ({ username, password }, { setSubmitting, setErrors }) => {
@@ -28,6 +31,7 @@ const LoginForm = () => {
         localStorage.setItem('username', data.username);
         setSubmitting(true);
         dispatch(setUserAuth({ token: data.token, username: data.username }));
+        navigate(routes.chat());
       })
       .catch((err) => setErrors(err));
   };
