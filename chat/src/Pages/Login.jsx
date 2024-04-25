@@ -4,7 +4,8 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserAuth } from '../store/slices/authSlice.js';
 import LoginComponent from '../components/LoginComponent.jsx';
@@ -19,8 +20,13 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(location);
+  }, [location]);
 
   const handleSubmit = async ({ username, password }, { setSubmitting, setErrors }) => {
     await axios

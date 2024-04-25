@@ -1,7 +1,6 @@
 import {
-  BrowserRouter, Routes, Route, Outlet, Navigate,
+  BrowserRouter, Routes, Route, Outlet, Navigate, useLocation,
 } from 'react-router-dom';
-
 import { Provider, useSelector } from 'react-redux';
 import store from './store/index.js';
 
@@ -13,6 +12,8 @@ import AppComponent from './components/AppComponent.jsx';
 import NavComponent from './components/NavComponent.jsx';
 
 const PrivateOutlet = () => {
+  const location = useLocation();
+  console.log(location);
   const { token } = useSelector((state) => state.auth);
   return token ? <Outlet /> : <Navigate to={routes.login()} />;
 };

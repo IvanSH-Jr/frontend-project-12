@@ -6,6 +6,7 @@ const NavComponent = () => (
       <Link className="navbar-brand" to="/">
         Hexlet Chat
       </Link>
+      <button type="button" className="btn btn-primary">Выйти</button>
     </div>
   </nav>
 );

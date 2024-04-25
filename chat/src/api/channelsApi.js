@@ -2,7 +2,17 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const channelsApi = createApi({
   reducerPath: 'channels',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/v1/channels', prepareHeaders:  }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: '/api/v1/channels',
+    prepareHeaders: (Headers, { getState }) => {
+      const { token } = getState().auth;
+      console.log('tttt');
+      if (token) {
+        Headers.set('Authorization', `Bearer ${token}`);
+      }
+      return Headers;
+    },
+  }),
   endpoints: (builder) => ({
     getChannels: builder.query({
       query: () => '',
@@ -16,9 +26,6 @@ export const channelsApi = createApi({
         body: channel,
       }),
     }),
-    editChannel: builder.mutation({
-      query: (id)
-    }),
     removeChannel: builder.mutation({
       query: (id) => ({
         url: id,
@@ -27,3 +34,10 @@ export const channelsApi = createApi({
     }),
   }),
 });
+
+export const {
+  useGetChannelsQuery,
+  useGetChannelByIdQuery,
+  useAddChannelMutation,
+  useRemoveChannelMutation,
+} = channelsApi;
