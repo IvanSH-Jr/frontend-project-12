@@ -6,7 +6,6 @@ export const channelsApi = createApi({
     baseUrl: '/api/v1/channels',
     prepareHeaders: (Headers, { getState }) => {
       const { token } = getState().auth;
-      console.log('tttt');
       if (token) {
         Headers.set('Authorization', `Bearer ${token}`);
       }

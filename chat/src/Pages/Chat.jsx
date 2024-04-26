@@ -1,14 +1,30 @@
 import { useGetChannelsQuery } from '../api/channelsApi';
+import ChatComponent from '../components/ChatComponent';
+
+const Channels = ({ channelName }) => (
+  <li className="nav-item w-100">
+    <button type="button" className="w-100 rounded-0 text-start btn btn-secondary">
+      <span className="me-1">#</span>
+      {channelName}
+    </button>
+  </li>
+);
 
 const Chat = () => {
   const { data } = useGetChannelsQuery();
-  console.log(useGetChannelsQuery());
-  console.log(data);
+  const ulClass = `nav flex-column nav-pills nav-fill 
+  px-2 mb-3 overflow-auto h-100 d-block`;
   return (
-    <div className="text-center mt-5">
-      <h1 className="text-muted">Chat</h1>
-      {data?.length ? <div>{data.map((item) => <li key={item.id}>{item.name}</li>)}</div> : null}
-    </div>
+    <ChatComponent>
+      {
+        data?.length
+        && (
+        <ul className={ulClass}>
+          {data.map((item) => <Channels key={item.id} channelName={item.name} />)}
+        </ul>
+        )
+      }
+    </ChatComponent>
   );
 };
 

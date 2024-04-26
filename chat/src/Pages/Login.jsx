@@ -39,7 +39,9 @@ const LoginForm = () => {
         dispatch(setUserAuth({ token: data.token, username: data.username }));
         navigate(routes.chat());
       })
-      .catch((err) => setErrors(err));
+      .catch(({ response: { data } }) => {
+        setErrors({ password: data.error, username });
+      });
   };
   return (
     <Formik
