@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 
 import { useGetChannelsQuery } from '../api/channelsApi';
 import { setActiveChannel } from '../store/slices/channelsSlice';
-import ChatComponent from '../components/ChatComponent';
+import ChannelsComponent from '../components/ChannelsComponent';
+import MessagesComponent from '../components/MessagesComponent';
 
 const Channels = ({ channel }) => {
   const dispatch = useDispatch();
@@ -33,16 +34,21 @@ const Chat = () => {
   const ulClass = `nav flex-column nav-pills nav-fill 
   px-2 mb-3 overflow-auto h-100 d-block`;
   return (
-    <ChatComponent>
-      {
-        data?.length
-        && (
-        <ul className={ulClass}>
-          {data.map((item) => <Channels key={item.id} channel={item} />)}
-        </ul>
-        )
-      }
-    </ChatComponent>
+    <div className="container h-100 my-4 overflow-hidden rounded shadow">
+      <div className="row h-100 bg-white flex-md-row">
+        <ChannelsComponent>
+          {
+            data?.length
+            && (
+            <ul className={ulClass}>
+              {data.map((item) => <Channels key={item.id} channel={item} />)}
+            </ul>
+            )
+          }
+        </ChannelsComponent>
+        <MessagesComponent />
+      </div>
+    </div>
   );
 };
 
