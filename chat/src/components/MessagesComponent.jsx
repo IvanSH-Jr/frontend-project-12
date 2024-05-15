@@ -4,43 +4,55 @@ import {
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
 import { useSelector } from 'react-redux';
-import { useGetMessagesQuery } from '../api/messagesApi';
+import { useGetMessagesQuery, useAddMessageMutation } from '../api/messagesApi';
 
-const Message = ({ messages, currentChannel }) => {
-  const filteredByChannelId = messages.filter(({ channelId }) => channelId === currentChannel);
-  console.log(currentChannel);
+const Message = ({ messages, channelId }) => {
+  const filteredByChannelId = messages.filter((m) => m.channelId === channelId);
   return (
     filteredByChannelId.map((message) => (
       <div className="text-break mb-2" key={message.id}>
         <b>{message.username}</b>
         :
+        {' '}
         {message.body}
       </div>
     )));
 };
 
 const MessagesComponent = () => {
-  const currentChannel = useSelector((state) => state.channelsSlice);
+  const { activeChannelName, activeChannelId } = useSelector((state) => state.channelsSlice);
+  const { username } = useSelector((state) => state.auth);
   const { data } = useGetMessagesQuery();
-  const handleFormSubmit = ({ message }) => {
-    console.log(message);
-    console.log(io);
-    const url = window.location.href;
-    const socket = io(url);
-    console.log(socket);
+  const [addMessage] = useAddMessageMutation();
+  const handleFormSubmit = async ({ message }) => {
+    const payload = { body: message, channelId: activeChannelId, username };
+    const response = await addMessage(payload);
+    console.log(response);
   };
+  const url = window.location.href;
+  const socket = io(url);
+  socket.on('newMessage', (payload) => console.log(payload));
+  console.log(data);
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># channel</b>
+            <b>
+              #
+              {' '}
+              {activeChannelName}
+            </b>
           </p>
           <span className="text-muted">0 сообщений</span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5 ">
           Переписка чат и тд
-          <Message messages={data ?? []} currentChannel={currentChannel} />
+          <Message
+            messages={data ?? []}
+            channelName={activeChannelName}
+            channelId={activeChannelId}
+          />
         </div>
         <div className="mt-auto px-5 py-3">
           <FormGroup className="mt-auto px-5 py-3">
