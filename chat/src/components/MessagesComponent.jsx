@@ -2,9 +2,16 @@ import { Formik, Form } from 'formik';
 import {
   FormControl, FormGroup,
 } from 'react-bootstrap';
+import { io } from 'socket.io-client';
 
 const MessagesComponent = () => {
-  const handleFormSubmit = ({ message }) => console.log(message);
+  const handleFormSubmit = ({ message }) => {
+    console.log(message);
+    console.log(io);
+    const url = window.location.href;
+    const socket = io(url);
+    console.log(socket);
+  };
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -27,7 +34,7 @@ const MessagesComponent = () => {
                 values,
                 handleChange,
               }) => (
-                <Form noValidate lassName="py-1 border rounded-2">
+                <Form noValidate className="py-1 border rounded-2">
                   <FormGroup className="input-group has-validation">
                     <FormControl
                       type="text"

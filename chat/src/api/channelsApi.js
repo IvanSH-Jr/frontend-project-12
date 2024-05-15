@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import routes from '../routes/routes';
 
 export const channelsApi = createApi({
   reducerPath: 'channels',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/v1/channels',
+    baseUrl: routes.channels(),
     prepareHeaders: (Headers, { getState }) => {
       const { token } = getState().auth;
       if (token) {
