@@ -3,8 +3,25 @@ import {
   FormControl, FormGroup,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
+import { useGetMessagesQuery } from '../api/messagesApi';
+
+const Message = ({ messages, currentChannel }) => {
+  const filteredByChannelId = messages.filter(({ channelId }) => channelId === currentChannel);
+  console.log(currentChannel);
+  return (
+    filteredByChannelId.map((message) => (
+      <div className="text-break mb-2" key={message.id}>
+        <b>{message.username}</b>
+        :
+        {message.body}
+      </div>
+    )));
+};
 
 const MessagesComponent = () => {
+  const currentChannel = useSelector((state) => state.channelsSlice);
+  const { data } = useGetMessagesQuery();
   const handleFormSubmit = ({ message }) => {
     console.log(message);
     console.log(io);
@@ -23,6 +40,7 @@ const MessagesComponent = () => {
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5 ">
           Переписка чат и тд
+          <Message messages={data ?? []} currentChannel={currentChannel} />
         </div>
         <div className="mt-auto px-5 py-3">
           <FormGroup className="mt-auto px-5 py-3">

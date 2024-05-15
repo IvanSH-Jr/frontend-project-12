@@ -9,7 +9,6 @@ import MessagesComponent from '../components/MessagesComponent';
 const Channels = ({ channel }) => {
   const dispatch = useDispatch();
   const { activeChannelName } = useSelector((state) => state.channelsSlice);
-  console.log(activeChannelName);
   const payload = {
     id: channel.id,
     name: channel.name,
