@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import {
   FormControl, FormGroup,
 } from 'react-bootstrap';
-import { io } from 'socket.io-client';
 import { useSelector } from 'react-redux';
 import { useGetMessagesQuery, useAddMessageMutation } from '../api/messagesApi';
+import socket from '../socket';
 
 const Message = ({ messages, channelId }) => {
   const filteredByChannelId = messages.filter((m) => m.channelId === channelId);
@@ -29,10 +30,14 @@ const MessagesComponent = () => {
     const response = await addMessage(payload);
     console.log(response);
   };
-  const url = window.location.href;
-  const socket = io(url);
-  socket.on('newMessage', (payload) => console.log(payload));
   console.log(data);
+  useEffect(() => {
+    socket.connect();
+    socket.on('newMessage', (newMessage) => {
+      console.log(newMessage);
+    });
+    socket.off('newMessage');
+  }, []);
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
