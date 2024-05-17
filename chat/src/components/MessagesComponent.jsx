@@ -3,8 +3,8 @@ import { Formik, Form } from 'formik';
 import {
   FormControl, FormGroup,
 } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useGetMessagesQuery, useAddMessageMutation } from '../api/messagesApi';
+import { useSelector, useDispatch } from 'react-redux';
+import { useGetMessagesQuery, useAddMessageMutation, messagesApi } from '../api/messagesApi';
 import socket from '../socket';
 
 const Message = ({ messages, channelId }) => {
@@ -23,21 +23,32 @@ const Message = ({ messages, channelId }) => {
 const MessagesComponent = () => {
   const { activeChannelName, activeChannelId } = useSelector((state) => state.channelsSlice);
   const { username } = useSelector((state) => state.auth);
-  const { data } = useGetMessagesQuery();
+  const dispatch = useDispatch();
+  const { data, refetch, isLoading } = useGetMessagesQuery();
   const [addMessage] = useAddMessageMutation();
   const handleFormSubmit = async ({ message }) => {
     const payload = { body: message, channelId: activeChannelId, username };
-    const response = await addMessage(payload);
-    console.log(response);
+    await addMessage(payload);
   };
-  console.log(data);
   useEffect(() => {
-    socket.connect();
-    socket.on('newMessage', (newMessage) => {
+    console.log('useEffect');
+    const handleNewMessage = (newMessage) => {
       console.log(newMessage);
-    });
-    socket.off('newMessage');
-  }, []);
+      dispatch(
+        messagesApi.util.updateQueryData(
+          'getMessages',
+          undefined,
+          (draftMessages) => { draftMessages.push(newMessage); },
+        ),
+      );
+    };
+    socket.connect();
+    socket.on('newMessage', handleNewMessage);
+    return () => socket.off('newMessage');
+  }, [dispatch, refetch]);
+
+  if (isLoading) return <h1>Loading...</h1>;
+
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
