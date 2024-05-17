@@ -7,24 +7,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useGetMessagesQuery, useAddMessageMutation, messagesApi } from '../api/messagesApi';
 import socket from '../socket';
 
-const Message = ({ messages, channelId }) => {
-  const filteredByChannelId = messages.filter((m) => m.channelId === channelId);
-  return (
-    filteredByChannelId.map((message) => (
-      <div className="text-break mb-2" key={message.id}>
-        <b>{message.username}</b>
-        :
-        {' '}
-        {message.body}
-      </div>
-    )));
-};
+const Message = ({ messages }) => messages.map((message) => (
+  <div className="text-break mb-2" key={message.id}>
+    <b>{message.username}</b>
+    :
+    {' '}
+    {message.body}
+  </div>
+));
 
 const MessagesComponent = () => {
   const { activeChannelName, activeChannelId } = useSelector((state) => state.channelsSlice);
   const { username } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { data, refetch, isLoading } = useGetMessagesQuery();
+  const { data = [], refetch, isLoading } = useGetMessagesQuery();
   const [addMessage] = useAddMessageMutation();
   const handleFormSubmit = async ({ message }) => {
     const payload = { body: message, channelId: activeChannelId, username };
@@ -46,9 +42,8 @@ const MessagesComponent = () => {
     socket.on('newMessage', handleNewMessage);
     return () => socket.off('newMessage');
   }, [dispatch, refetch]);
-
+  const filteredMessagesByChannelId = data.filter((m) => m.channelId === activeChannelId);
   if (isLoading) return <h1>Loading...</h1>;
-
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -60,14 +55,16 @@ const MessagesComponent = () => {
               {activeChannelName}
             </b>
           </p>
-          <span className="text-muted">0 сообщений</span>
+          <span className="text-muted">
+            {filteredMessagesByChannelId.length}
+            {' '}
+            сообщений
+          </span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5 ">
           Переписка чат и тд
           <Message
-            messages={data ?? []}
-            channelName={activeChannelName}
-            channelId={activeChannelId}
+            messages={filteredMessagesByChannelId}
           />
         </div>
         <div className="mt-auto px-5 py-3">
