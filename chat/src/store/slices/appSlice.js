@@ -5,7 +5,7 @@ const initialState = {
   currentChannelName: 'general',
   modalChannelId: '',
   modalChannelName: '',
-  showModal: '',
+  modalType: '',
 };
 
 const appSlice = createSlice({
@@ -21,7 +21,7 @@ const appSlice = createSlice({
     setChannelModal: (state, action) => {
       state.modalChannelId = action.payload.id;
       state.modalChannelName = action.payload.name;
-      state.showModal = action.payload.modalName;
+      state.modalType = action.payload.modalType;
     },
   },
 });

@@ -83,7 +83,7 @@ const MessagesComponent = () => {
                       type="text"
                       name="message"
                       id="message"
-                      value={values.username}
+                      value={values.message}
                       onChange={handleChange}
                       autoFocus
                       placeholder="Ваше сообщение..."
