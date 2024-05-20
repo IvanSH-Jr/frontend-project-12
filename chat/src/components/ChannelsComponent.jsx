@@ -1,8 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { changeChannel, setChannelModal } from '../store/slices/appSlice';
-import { useGetChannelsQuery } from '../api/channelsApi';
+import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
 import AddChannel from '../modals/AddChannel';
+import socket from '../socket';
 
 const Channels = ({ channel }) => {
   const dispatch = useDispatch();
@@ -24,8 +26,8 @@ const Channels = ({ channel }) => {
   );
 };
 
-const ChatComponent = () => {
-  const { data } = useGetChannelsQuery();
+const ChannelsComponent = () => {
+  const { data: channels = [], refetch } = useGetChannelsQuery();
   const ulClass = `nav flex-column nav-pills nav-fill 
 px-2 mb-3 overflow-auto h-100 d-block`;
   const dispatch = useDispatch();
@@ -37,6 +39,21 @@ px-2 mb-3 overflow-auto h-100 d-block`;
     };
     dispatch(setChannelModal(payload));
   };
+  useEffect(() => {
+    const handleNewChannel = (newChannel) => {
+      console.log(newChannel); // { id: 6, name: "new channel", removable: true }
+      dispatch(
+        channelsApi.util.updateQueryData(
+          'getChannels',
+          undefined,
+          (draftChannels) => { draftChannels.push(newChannel); },
+        ),
+      );
+    };
+    socket.connect();
+    socket.on('newChannel', handleNewChannel);
+    return () => socket.off('newMessage');
+  }, [dispatch, refetch]);
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -53,23 +70,18 @@ px-2 mb-3 overflow-auto h-100 d-block`;
           <span className="visually-hidden">+</span>
         </button>
       </div>
-      {
-        data?.length
-          && (
-          <ul className={ulClass}>
-            {
-              data.map((item) => (
-                <li key={item.id} className="nav-item w-100">
-                  <Channels channel={item} />
-                </li>
-              ))
-            }
-          </ul>
-          )
-      }
+      <ul className={ulClass}>
+        {
+          channels.map((item) => (
+            <li key={item.id} className="nav-item w-100">
+              <Channels channel={item} />
+            </li>
+          ))
+        }
+      </ul>
       <AddChannel />
     </div>
   );
 };
 
-export default ChatComponent;
+export default ChannelsComponent;

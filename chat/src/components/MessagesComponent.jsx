@@ -27,9 +27,7 @@ const MessagesComponent = () => {
     await addMessage(payload);
   };
   useEffect(() => {
-    console.log('useEffect');
     const handleNewMessage = (newMessage) => {
-      console.log(newMessage);
       dispatch(
         messagesApi.util.updateQueryData(
           'getMessages',
