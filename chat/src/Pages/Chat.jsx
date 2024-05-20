@@ -1,30 +1,27 @@
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-
+import { changeChannel } from '../store/slices/appSlice';
 import { useGetChannelsQuery } from '../api/channelsApi';
-import { setActiveChannel } from '../store/slices/channelsSlice';
 import ChannelsComponent from '../components/ChannelsComponent';
 import MessagesComponent from '../components/MessagesComponent';
 
 const Channels = ({ channel }) => {
   const dispatch = useDispatch();
-  const { activeChannelName } = useSelector((state) => state.channelsSlice);
+  const { currentChannelName } = useSelector((state) => state.app);
   const payload = {
     id: channel.id,
     name: channel.name,
   };
   const btnClassName = 'w-100 rounded-0 text-start';
   return (
-    <li className="nav-item w-100">
-      <Button
-        variant={`${activeChannelName === channel.name ? 'secondary' : null}`}
-        className={btnClassName}
-        onClick={() => dispatch(setActiveChannel(payload))}
-      >
-        <span className="me-1">#</span>
-        {channel.name}
-      </Button>
-    </li>
+    <Button
+      variant={`${currentChannelName === channel.name ? 'secondary' : null}`}
+      className={btnClassName}
+      onClick={() => dispatch(changeChannel(payload))}
+    >
+      <span className="me-1">#</span>
+      {channel.name}
+    </Button>
   );
 };
 
@@ -40,7 +37,13 @@ const Chat = () => {
             data?.length
             && (
             <ul className={ulClass}>
-              {data.map((item) => <Channels key={item.id} channel={item} />)}
+              {
+              data.map((item) => (
+                <li key={item.id} className="nav-item w-100">
+                  <Channels channel={item} />
+                </li>
+              ))
+              }
             </ul>
             )
           }

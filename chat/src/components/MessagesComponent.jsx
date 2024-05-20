@@ -17,13 +17,13 @@ const Message = ({ messages }) => messages.map((message) => (
 ));
 
 const MessagesComponent = () => {
-  const { activeChannelName, activeChannelId } = useSelector((state) => state.channelsSlice);
+  const { currentChannelName, currentChannelId } = useSelector((state) => state.app);
   const { username } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { data = [], refetch, isLoading } = useGetMessagesQuery();
   const [addMessage] = useAddMessageMutation();
   const handleFormSubmit = async ({ message }) => {
-    const payload = { body: message, channelId: activeChannelId, username };
+    const payload = { body: message, channelId: currentChannelId, username };
     await addMessage(payload);
   };
   useEffect(() => {
@@ -42,7 +42,7 @@ const MessagesComponent = () => {
     socket.on('newMessage', handleNewMessage);
     return () => socket.off('newMessage');
   }, [dispatch, refetch]);
-  const filteredMessagesByChannelId = data.filter((m) => m.channelId === activeChannelId);
+  const filteredMessagesByChannelId = data.filter((m) => m.channelId === currentChannelId);
   if (isLoading) return <h1>Loading...</h1>;
   return (
     <div className="col p-0 h-100">
@@ -52,7 +52,7 @@ const MessagesComponent = () => {
             <b>
               #
               {' '}
-              {activeChannelName}
+              {currentChannelName}
             </b>
           </p>
           <span className="text-muted">
