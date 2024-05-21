@@ -6,7 +6,7 @@ import {
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { setChannelModal } from '../store/slices/appSlice';
+import { setChannelModal, setActiveChannel } from '../store/slices/appSlice';
 import { useAddChannelMutation, useGetChannelsQuery } from '../api/channelsApi';
 
 const AddChannel = () => {
@@ -22,8 +22,9 @@ const AddChannel = () => {
   const handleCloseModal = () => dispatch(setChannelModal({ id: '', name: '', modalType: '' }));
   const handleFormSubmit = async ({ channelName }) => {
     const body = { name: channelName };
-    const response = await addChannel(body);
-    console.log(response);
+    const { data: { id, name } } = await addChannel(body);
+    dispatch(setActiveChannel({ id, name }));
+    handleCloseModal();
   };
 
   return (

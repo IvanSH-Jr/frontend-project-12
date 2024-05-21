@@ -13,7 +13,7 @@ const appSlice = createSlice({
   initialState,
   /* eslint-disable no-param-reassign */
   reducers: {
-    changeChannel: (state, action) => {
+    setActiveChannel: (state, action) => {
       const { name, id } = action.payload;
       state.currentChannelId = id;
       state.currentChannelName = name;
@@ -27,6 +27,6 @@ const appSlice = createSlice({
 });
 
 export const {
-  changeChannel, setChannelModal,
+  setActiveChannel, setChannelModal,
 } = appSlice.actions;
 export default appSlice.reducer;

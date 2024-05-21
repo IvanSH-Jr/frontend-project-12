@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-import { changeChannel, setChannelModal } from '../store/slices/appSlice';
+import { setActiveChannel, setChannelModal } from '../store/slices/appSlice';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
 import AddChannel from '../modals/AddChannel';
 import socket from '../socket';
@@ -18,7 +18,7 @@ const Channels = ({ channel }) => {
     <Button
       variant={`${currentChannelName === channel.name ? 'secondary' : null}`}
       className={btnClassName}
-      onClick={() => dispatch(changeChannel(payload))}
+      onClick={() => dispatch(setActiveChannel(payload))}
     >
       <span className="me-1">#</span>
       {channel.name}
