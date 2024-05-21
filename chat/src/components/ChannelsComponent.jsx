@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { setActiveChannel, setChannelModal } from '../store/slices/appSlice';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
 import AddChannel from '../modals/AddChannel';
@@ -13,16 +15,35 @@ const Channels = ({ channel }) => {
     id: channel.id,
     name: channel.name,
   };
-  const btnClassName = 'w-100 rounded-0 text-start';
   return (
-    <Button
-      variant={`${currentChannelName === channel.name ? 'secondary' : null}`}
-      className={btnClassName}
-      onClick={() => dispatch(setActiveChannel(payload))}
-    >
-      <span className="me-1">#</span>
-      {channel.name}
-    </Button>
+    channel.removable ? (
+      <Dropdown
+        as={ButtonGroup}
+        className="w-100"
+        onClick={() => dispatch(setActiveChannel(payload))}
+      >
+        <Button
+          className="w-100 rounded-0 text-start text-truncate"
+          variant={`${currentChannelName === channel.name ? 'secondary' : null}`}
+        >
+          {`# ${channel.name}`}
+        </Button>
+        <Dropdown.Toggle split variant={`${currentChannelName === channel.name ? 'secondary' : null}`} id={`dropdown-split-basic-${channel.id}`} />
+        <Dropdown.Menu>
+          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+          <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    ) : (
+      <Button
+        as={ButtonGroup}
+        variant={`${currentChannelName === channel.name ? 'secondary' : null}`}
+        className="w-100 text-start rounded-0 text-truncate"
+        onClick={() => dispatch(setActiveChannel(payload))}
+      >
+        {`# ${channel.name}`}
+      </Button>
+    )
   );
 };
 

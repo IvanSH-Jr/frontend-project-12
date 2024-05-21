@@ -22,9 +22,10 @@ const MessagesComponent = () => {
   const dispatch = useDispatch();
   const { data = [], refetch, isLoading } = useGetMessagesQuery();
   const [addMessage] = useAddMessageMutation();
-  const handleFormSubmit = async ({ message }) => {
+  const handleFormSubmit = async ({ message }, { resetForm }) => {
     const payload = { body: message, channelId: currentChannelId, username };
     await addMessage(payload);
+    resetForm();
   };
   useEffect(() => {
     const handleNewMessage = (newMessage) => {
