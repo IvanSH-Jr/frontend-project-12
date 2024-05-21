@@ -6,32 +6,37 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { setActiveChannel, setChannelModal } from '../store/slices/appSlice';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
 import AddChannel from '../modals/AddChannel';
+import RenameChannel from '../modals/RenameChannel';
 import socket from '../socket';
 
-const Channels = ({ channel }) => {
+const Channel = ({ channel }) => {
   const dispatch = useDispatch();
   const { currentChannelName } = useSelector((state) => state.app);
   const payload = {
     id: channel.id,
     name: channel.name,
   };
+  const handleDropDown = (modalType, dropDownChannel) => {
+    console.log(dropDownChannel);
+    dispatch(setChannelModal({ id: dropDownChannel.id, name: dropDownChannel.name, modalType }));
+  };
   return (
     channel.removable ? (
       <Dropdown
         as={ButtonGroup}
         className="w-100"
-        onClick={() => dispatch(setActiveChannel(payload))}
       >
         <Button
           className="w-100 rounded-0 text-start text-truncate"
           variant={`${currentChannelName === channel.name ? 'secondary' : null}`}
+          onClick={() => dispatch(setActiveChannel(payload))}
         >
           {`# ${channel.name}`}
         </Button>
         <Dropdown.Toggle split variant={`${currentChannelName === channel.name ? 'secondary' : null}`} id={`dropdown-split-basic-${channel.id}`} />
         <Dropdown.Menu>
-          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDropDown('delete-channel', channel)}>Удалить</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDropDown('rename-channel', channel)}>Переименовать</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     ) : (
@@ -48,7 +53,7 @@ const Channels = ({ channel }) => {
 };
 
 const ChannelsComponent = () => {
-  const { data: channels = [], refetch } = useGetChannelsQuery();
+  const { data: channels = [] } = useGetChannelsQuery();
   const ulClass = `nav flex-column nav-pills nav-fill 
 px-2 mb-3 overflow-auto h-100 d-block`;
   const dispatch = useDispatch();
@@ -62,7 +67,6 @@ px-2 mb-3 overflow-auto h-100 d-block`;
   };
   useEffect(() => {
     const handleNewChannel = (newChannel) => {
-      console.log(newChannel); // { id: 6, name: "new channel", removable: true }
       dispatch(
         channelsApi.util.updateQueryData(
           'getChannels',
@@ -71,10 +75,27 @@ px-2 mb-3 overflow-auto h-100 d-block`;
         ),
       );
     };
+    const handleRenameChannel = ({ id, name }) => {
+      dispatch(
+        channelsApi.util.updateQueryData(
+          'getChannels',
+          undefined,
+          (draftChannels) => {
+            const channelIndexToUpdate = draftChannels.findIndex((channel) => channel.id === id);
+            const link = draftChannels;
+            link[channelIndexToUpdate].name = name;
+          },
+        ),
+      );
+    };
     socket.connect();
     socket.on('newChannel', handleNewChannel);
-    return () => socket.off('newChannel');
-  }, [dispatch, refetch]);
+    socket.on('renameChannel', handleRenameChannel);
+    return () => {
+      socket.off('newChannel');
+      socket.off('renameChannel');
+    };
+  }, [dispatch]);
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -95,12 +116,13 @@ px-2 mb-3 overflow-auto h-100 d-block`;
         {
           channels.map((item) => (
             <li key={item.id} className="nav-item w-100">
-              <Channels channel={item} />
+              <Channel channel={item} />
             </li>
           ))
         }
       </ul>
       <AddChannel />
+      <RenameChannel />
     </div>
   );
 };
