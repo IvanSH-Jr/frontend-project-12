@@ -25,6 +25,7 @@ const RenameChannel = () => {
   const handleCloseModal = () => dispatch(setChannelModal({ id: '', name: '', modalType: '' }));
   const handleFormSubmit = async ({ newName }) => {
     await editChannel({ id: modalChannelId, name: newName });
+    // dispatch(setActiveChannel({ id: modalChannelId, name: modalChannelName }));
     handleCloseModal();
   };
   return (
