@@ -33,8 +33,8 @@ const Channel = ({ channel }) => {
         </Button>
         <Dropdown.Toggle split variant={`${currentChannelName === channel.name ? 'secondary' : null}`} id={`dropdown-split-basic-${channel.id}`} />
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => handleDropDown('delete-channel', channel)}>Удалить</Dropdown.Item>
-          <Dropdown.Item onClick={() => handleDropDown('rename-channel', channel)}>Переименовать</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDropDown('removing', channel)}>Удалить</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDropDown('renaming', channel)}>Переименовать</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     ) : (

@@ -17,6 +17,7 @@ const BasicModal = () => {
   const { data: channels = [] } = useGetChannelsQuery();
   const currentChannelId = useSelector((state) => state.app.currentChannelId);
   const modalChannelId = useSelector((state) => state.app.modalChannelId);
+  const modalChannelName = useSelector((state) => state.app.modalChannelName);
   const modalType = useSelector((state) => state.app.modalType);
   const channelsNames = channels.map((channel) => channel.name);
   const channelNameSchema = Yup.object().shape({
@@ -33,7 +34,8 @@ const BasicModal = () => {
         validation={channelNameSchema}
         channelId={currentChannelId}
         modalId={modalChannelId}
-        dispatch
+        modalChannelName={modalChannelName}
+        dispatch={dispatch}
       />
     ) : null
   );
