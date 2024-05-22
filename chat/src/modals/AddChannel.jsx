@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import {
   FormControl,
 } from 'react-bootstrap';
+import { useEffect, useRef } from 'react';
 import { Formik, Form } from 'formik';
 import { setActiveChannel } from '../store/slices/appSlice';
 import { useAddChannelMutation } from '../api/channelsApi';
@@ -20,7 +21,10 @@ const AddChannel = ({
     dispatch(setActiveChannel({ id, name }));
     onHide();
   };
-
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
   return (
     <Modal show={modalType === 'adding'} onHide={onHide} centered>
       <Modal.Header closeButton>
@@ -36,7 +40,7 @@ const AddChannel = ({
             values, handleChange, errors,
           }) => (
             <Form>
-              <FormControl value={values.channelName} name="channelName" onChange={handleChange} id="channelName" isInvalid={!!errors.channelName} autoFocus />
+              <FormControl value={values.channelName} ref={inputRef} name="channelName" onChange={handleChange} id="channelName" isInvalid={!!errors.channelName} />
               <FormControl.Feedback type="invalid">{errors.channelName}</FormControl.Feedback>
               <div className="d-flex justify-content-end mt-2">
                 <Button type="button" variant="secondary" onClick={onHide} className="me-2">Отменить</Button>
