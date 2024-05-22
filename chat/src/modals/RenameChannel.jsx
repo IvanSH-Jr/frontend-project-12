@@ -10,15 +10,13 @@ const RenameChannel = ({
   modalId,
   modalChannelName,
 }) => {
-  console.log(validation);
   const inputRef = useRef();
   useEffect(() => {
     inputRef.current?.select();
   });
   const [editChannel] = useEditChannelMutation();
-  const handleFormSubmit = async ({ newName }) => {
-    console.log(newName);
-    await editChannel({ id: modalId, name: newName });
+  const handleFormSubmit = async ({ channelName }) => {
+    await editChannel({ id: modalId, name: channelName });
     // dispatch(setActiveChannel({ id: modalChannelId, name: modalChannelName }));
     onHide();
   };
@@ -29,7 +27,7 @@ const RenameChannel = ({
       </Modal.Header>
       <Modal.Body>
         <Formik
-          initialValues={{ newName: modalChannelName }}
+          initialValues={{ channelName: modalChannelName }}
           onSubmit={handleFormSubmit}
           validationSchema={validation}
         >
@@ -37,8 +35,8 @@ const RenameChannel = ({
             values, handleChange, errors,
           }) => (
             <Form>
-              <FormControl value={values.newName} ref={inputRef} name="newName" onChange={handleChange} id="newName" isInvalid={!!errors.newName} />
-              <FormControl.Feedback type="invalid">{errors.newName}</FormControl.Feedback>
+              <FormControl value={values.channelName} ref={inputRef} name="channelName" onChange={handleChange} id="channelName" isInvalid={!!errors.channelName} />
+              <FormControl.Feedback type="invalid">{errors.channelName}</FormControl.Feedback>
               <div className="d-flex justify-content-end mt-2">
                 <Button type="button" variant="secondary" onClick={onHide} className="me-2">Отменить</Button>
                 <Button type="submit" variant="primary">Отправить</Button>

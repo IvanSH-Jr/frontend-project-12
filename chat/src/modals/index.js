@@ -20,6 +20,7 @@ const BasicModal = () => {
   const modalChannelName = useSelector((state) => state.app.modalChannelName);
   const modalType = useSelector((state) => state.app.modalType);
   const channelsNames = channels.map((channel) => channel.name);
+  console.log(channelsNames);
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string().notOneOf(channelsNames, 'DRY!').min(3, 'less than 3').max(20, 'large than 20')
       .required('required'),
