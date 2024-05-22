@@ -7,6 +7,7 @@ import { setActiveChannel, setChannelModal } from '../store/slices/appSlice';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
 import AddChannel from '../modals/AddChannel';
 import RenameChannel from '../modals/RenameChannel';
+import DeleteChannel from '../modals/DeleteChannel';
 import socket from '../socket';
 
 const Channel = ({ channel }) => {
@@ -17,7 +18,6 @@ const Channel = ({ channel }) => {
     name: channel.name,
   };
   const handleDropDown = (modalType, dropDownChannel) => {
-    console.log(dropDownChannel);
     dispatch(setChannelModal({ id: dropDownChannel.id, name: dropDownChannel.name, modalType }));
   };
   return (
@@ -88,12 +88,23 @@ px-2 mb-3 overflow-auto h-100 d-block`;
         ),
       );
     };
+    const handleDeleteChannel = ({ id }) => {
+      dispatch(
+        channelsApi.util.updateQueryData(
+          'getChannels',
+          undefined,
+          (draft) => draft.filter((channel) => channel.id !== id),
+        ),
+      );
+    };
     socket.connect();
     socket.on('newChannel', handleNewChannel);
     socket.on('renameChannel', handleRenameChannel);
+    socket.on('removeChannel', handleDeleteChannel);
     return () => {
       socket.off('newChannel');
       socket.off('renameChannel');
+      socket.off('removeChannel');
     };
   }, [dispatch]);
   return (
@@ -123,6 +134,7 @@ px-2 mb-3 overflow-auto h-100 d-block`;
       </ul>
       <AddChannel />
       <RenameChannel />
+      <DeleteChannel />
     </div>
   );
 };
