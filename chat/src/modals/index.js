@@ -26,14 +26,16 @@ const BasicModal = () => {
   const handleCloseModal = () => dispatch(setChannelModal({ id: '', name: '', modalType: '' }));
   const Modal = modals[modalType];
   return (
-    <Modal
-      onHide={handleCloseModal}
-      modalType={modalType}
-      validation={channelNameSchema}
-      channelId={currentChannelId}
-      modalId={modalChannelId}
-      dispatch
-    />
+    modalType ? (
+      <Modal
+        onHide={handleCloseModal}
+        modalType={modalType}
+        validation={channelNameSchema}
+        channelId={currentChannelId}
+        modalId={modalChannelId}
+        dispatch
+      />
+    ) : null
   );
 };
 
