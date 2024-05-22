@@ -3,12 +3,10 @@ import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { setActiveChannel, setChannelModal } from '../store/slices/appSlice';
-import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
-import AddChannel from '../modals/AddChannel';
-import RenameChannel from '../modals/RenameChannel';
-import DeleteChannel from '../modals/DeleteChannel';
-import socket from '../socket';
+import { setActiveChannel, setChannelModal } from '../store/slices/appSlice.js';
+import { useGetChannelsQuery, channelsApi } from '../api/channelsApi.js';
+import BasicModal from '../modals/index.js';
+import socket from '../socket.js';
 
 const Channel = ({ channel }) => {
   const dispatch = useDispatch();
@@ -65,6 +63,10 @@ const ChannelsComponent = () => {
     };
     dispatch(setChannelModal(payload));
   };
+  const renderModal = () => {
+    const Component = BasicModal;
+    return <Component />;
+  };
   useEffect(() => {
     const handleNewChannel = (newChannel) => {
       dispatch(
@@ -114,7 +116,7 @@ const ChannelsComponent = () => {
         <button
           type="button"
           className="p-0 text-primary btn btn-group-vertical"
-          onClick={() => handleAddingChannel('addChannel')}
+          onClick={() => handleAddingChannel('adding')}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
@@ -132,9 +134,7 @@ const ChannelsComponent = () => {
           ))
         }
       </ul>
-      <AddChannel />
-      <RenameChannel />
-      <DeleteChannel />
+      {renderModal()}
     </div>
   );
 };
