@@ -28,8 +28,8 @@ export const channelsApi = createApi({
     }),
     removeChannel: builder.mutation({
       query: (id) => ({
-        url: id,
         method: 'DELETE',
+        url: id,
       }),
     }),
   }),
