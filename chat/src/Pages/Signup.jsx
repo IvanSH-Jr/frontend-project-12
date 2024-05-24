@@ -6,9 +6,11 @@ import {
   FormGroup, FormControl, Button, FormFloating, FormLabel,
 } from 'react-bootstrap';
 import SignupComponent from '../components/SignupComponent';
-import registrationPicture from '../assets/registr';
+import registr from '../assets/registr.png';
+import { useSignupMutation } from '../api/userApi';
 
 const Signup = () => {
+  const [signup] = useSignupMutation();
   const signupSchema = Yup.object().shape({
     username: Yup.string()
       .min(3, 'less than 3')
@@ -17,11 +19,15 @@ const Signup = () => {
     password: Yup.string().min(6, 'tooShort').required('required'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password')], '').required('required'),
   });
+  const handleSubmit = async ({ username, password }) => {
+    const { data } = await signup({ username, password });
+    console.log(data);
+  };
   return (
-    <SignupComponent img={registrationPicture}>
+    <SignupComponent img={registr}>
       <Formik
         initialValues={{ username: '', password: '', confirmPassword: '' }}
-        onSubmit={(e) => console.log(e)}
+        onSubmit={handleSubmit}
         validationSchema={signupSchema}
         validateOnChange={false}
         validateOnBlur

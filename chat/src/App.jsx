@@ -8,6 +8,7 @@ import routes from './routes/routes.js';
 import NotFound from './Pages/NotFound.jsx';
 import Login from './Pages/Login.jsx';
 import Chat from './Pages/Chat.jsx';
+import Signup from './Pages/Signup.jsx';
 import AppComponent from './components/AppComponent.jsx';
 import NavComponent from './components/NavComponent.jsx';
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="" element={<Chat />} />
           </Route>
           <Route path={routes.login()} element={<Login />} />
+          <Route path={routes.signup()} element={<Signup />} />
         </Routes>
       </AppComponent>
     </BrowserRouter>

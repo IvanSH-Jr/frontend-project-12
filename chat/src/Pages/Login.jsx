@@ -2,12 +2,12 @@ import { Formik, Form } from 'formik';
 import {
   FormControl, Button, FormFloating, FormLabel, FormGroup,
 } from 'react-bootstrap';
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserAuth } from '../store/slices/authSlice.js';
+import { useLoginMutation } from '../api/userApi.js';
 import LoginComponent from '../components/LoginComponent.jsx';
 import routes from '../routes/routes.js';
 
@@ -23,25 +23,17 @@ const LoginForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [loginReq] = useLoginMutation();
   useEffect(() => {
     console.log(location);
   }, [location]);
 
-  const handleSubmit = async ({ username, password }, { setSubmitting, setErrors }) => {
-    await axios
-      .post('/api/v1/login', { username, password })
-      .then((res) => {
-        const { data } = res;
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
-        setSubmitting(true);
-        dispatch(setUserAuth({ token: data.token, username: data.username }));
-        navigate(routes.chat());
-      })
-      .catch(({ response: { data } }) => {
-        setErrors({ password: data.error, username });
-      });
+  const handleSubmit = async ({ username, password }) => {
+    const { data } = await loginReq({ username, password });
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', data.username);
+    dispatch(setUserAuth({ token: data.token, username: data.username }));
+    navigate(routes.chat());
   };
   return (
     <Formik
