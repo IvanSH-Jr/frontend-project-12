@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Modal, Button } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import { useRemoveChannelMutation } from '../api/channelsApi';
@@ -9,6 +10,7 @@ const DeleteChannel = ({
   modalId,
   dispatch,
 }) => {
+  const { t } = useTranslation();
   const [removeChannelById] = useRemoveChannelMutation();
   const handleFormSubmit = async () => {
     console.log(modalId);
@@ -20,7 +22,7 @@ const DeleteChannel = ({
   return (
     <Modal show={modalType === 'removing'} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('chat.modals.deleteChannelHeader')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -29,10 +31,10 @@ const DeleteChannel = ({
         >
           {() => (
             <Form>
-              <p>Уверены?</p>
+              <p>{t('chat.modals.deleteChannelBody')}</p>
               <div className="d-flex justify-content-end mt-2">
-                <Button type="button" variant="secondary" onClick={onHide} className="me-2">Отменить</Button>
-                <Button type="submit" variant="danger">Удалить</Button>
+                <Button type="button" variant="secondary" onClick={onHide} className="me-2">{t('chat.modals.declineButton')}</Button>
+                <Button type="submit" variant="danger">{t('chat.modals.deleteButton')}</Button>
               </div>
             </Form>
           )}

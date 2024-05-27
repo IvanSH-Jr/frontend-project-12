@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserAuth } from '../store/slices/authSlice';
 import routes from '../routes/routes';
 
 const NavComponent = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const handleLogOut = () => {
@@ -17,7 +19,7 @@ const NavComponent = () => {
         <Link className="navbar-brand" to={routes.chat()}>
           Hexlet Chat
         </Link>
-        {token && (<button type="button" className="btn btn-primary" onClick={handleLogOut}>Выйти</button>)}
+        {token && (<button type="button" className="btn btn-primary" onClick={handleLogOut}>{t('chat.logOutBtn')}</button>)}
       </div>
     </nav>
   );

@@ -24,11 +24,12 @@ const ru = {
       },
     },
     chat: {
+      mainLink: 'Чат Хекслета',
       logOutBtn: 'Выйти',
       channels: 'Каналы',
       addChannel: 'Создать новый канал',
       newMessagePlaceholder: 'Введите сообщение...',
-      sendMessageBtn: 'Отправить сообщение',
+      sendMessageBtn: 'Отправить',
       newMessageInput: 'Новое сообщение',
       messageCount: {
         message_zero: '{{count}} сообщений',

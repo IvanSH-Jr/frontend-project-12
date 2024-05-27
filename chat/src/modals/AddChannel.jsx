@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import {
   FormControl,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
 import { Formik, Form } from 'formik';
 import { setActiveChannel } from '../store/slices/appSlice';
@@ -14,6 +15,7 @@ const AddChannel = ({
   validation,
   dispatch,
 }) => {
+  const { t } = useTranslation();
   const [addChannel] = useAddChannelMutation();
   const handleFormSubmit = async ({ channelName }) => {
     const body = { name: channelName };
@@ -28,7 +30,7 @@ const AddChannel = ({
   return (
     <Modal show={modalType === 'adding'} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('chat.modals.addNewChannelHeader')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -43,8 +45,8 @@ const AddChannel = ({
               <FormControl value={values.channelName} ref={inputRef} name="channelName" onChange={handleChange} id="channelName" isInvalid={!!errors.channelName} />
               <FormControl.Feedback type="invalid">{errors.channelName}</FormControl.Feedback>
               <div className="d-flex justify-content-end mt-2">
-                <Button type="button" variant="secondary" onClick={onHide} className="me-2">Отменить</Button>
-                <Button type="submit" variant="primary">Отправить</Button>
+                <Button type="button" variant="secondary" onClick={onHide} className="me-2">{t('chat.modals.declineButton')}</Button>
+                <Button type="submit" variant="primary">{t('chat.modals.confirmButton')}</Button>
               </div>
             </Form>
           )}
