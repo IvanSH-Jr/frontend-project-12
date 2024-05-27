@@ -1,5 +1,5 @@
-// import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -8,11 +8,13 @@ import {
 import SignupComponent from '../components/SignupComponent';
 import registr from '../assets/registr.png';
 import { useSignupMutation } from '../api/userApi';
-// import { setUserAuth } from '../store/slices/authSlice';
+import { setUserAuth } from '../store/slices/authSlice';
+import routes from '../routes/routes';
 
 const Signup = () => {
-  // const dispatch = useDispatch();
-  const [signup, { error }] = useSignupMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [signup] = useSignupMutation();
   const signupSchema = Yup.object().shape({
     username: Yup.string()
       .min(3, 'less than 3')
@@ -21,14 +23,31 @@ const Signup = () => {
     password: Yup.string().min(6, 'tooShort').required('required'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password')], '').required('required'),
   });
-  const handleSubmit = async ({ username, password } /* { setSubmitting, setErrors } */) => {
-    const { data } = await signup({ username, password });
-    console.log(data);
-    console.log(error);
-    // if (isError) console.log(error);
-    // localStorage.setItem('token', data.token);
-    // localStorage.setItem('username', data.username);
-    // dispatch(setUserAuth({ token: data.token, username: data.username }));
+  const handleSubmit = async ({ username, password }, { setErrors }) => {
+    await signup({ username, password })
+      .unwrap()
+      .then((data) => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        dispatch(setUserAuth({ token: data.token, username: data.username }));
+        navigate(routes.chat());
+      })
+      .catch((err) => {
+        const { status } = err;
+        switch (status) {
+          case 409: {
+            setErrors({ username: ' ', password: ' ', confirmPassword: 'Такой пользователь уже существует' });
+            break;
+          }
+          case 'FETCH_ERROR': {
+            setErrors({ username: ' ', password: ' ', confirmPassword: 'Ошибка сети' });
+            break;
+          }
+          default: {
+            setErrors({ username: ' ', password: ' ', confirmPassword: 'Неизвестная ошибка' });
+          }
+        }
+      });
   };
   return (
     <SignupComponent img={registr}>
