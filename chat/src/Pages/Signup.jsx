@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
@@ -12,16 +13,17 @@ import { setUserAuth } from '../store/slices/authSlice';
 import routes from '../routes/routes';
 
 const Signup = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [signup] = useSignupMutation();
   const signupSchema = Yup.object().shape({
     username: Yup.string()
-      .min(3, 'less than 3')
-      .max(20, 'large')
-      .required('required'),
-    password: Yup.string().min(6, 'tooShort').required('required'),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password')], '').required('required'),
+      .min(3, t('signup.errors.username'))
+      .max(20, t('signup.errors.username'))
+      .required(t('signup.errors.required')),
+    password: Yup.string().min(6, t('signup.errors.shortPassword')).required(t('signup.errors.shortPassword')),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password')], t('signup.errors.passwordMatch')).required(t('signup.errors.required')),
   });
   const handleSubmit = async ({ username, password }, { setErrors }) => {
     await signup({ username, password })
@@ -36,15 +38,15 @@ const Signup = () => {
         const { status } = err;
         switch (status) {
           case 409: {
-            setErrors({ username: ' ', password: ' ', confirmPassword: 'Такой пользователь уже существует' });
+            setErrors({ username: ' ', password: ' ', confirmPassword: t('signup.errors.userExists') });
             break;
           }
           case 'FETCH_ERROR': {
-            setErrors({ username: ' ', password: ' ', confirmPassword: 'Ошибка сети' });
+            setErrors({ username: ' ', password: ' ', confirmPassword: t('signup.errors.network') });
             break;
           }
           default: {
-            setErrors({ username: ' ', password: ' ', confirmPassword: 'Неизвестная ошибка' });
+            setErrors({ username: ' ', password: ' ', confirmPassword: t('signup.errors.defaultErr') });
           }
         }
       });
@@ -62,7 +64,7 @@ const Signup = () => {
           errors, values, handleChange, handleBlur, isSubmitting,
         }) => (
           <Form className="w-50">
-            <h1 className="text-center mb-4">Регистрация</h1>
+            <h1 className="text-center mb-4">{t('signup.form.header')}</h1>
             <FormFloating className="mb-3">
               <FormControl
                 name="username"
@@ -73,7 +75,7 @@ const Signup = () => {
                 isInvalid={!!errors.username}
                 autoFocus
               />
-              <FormLabel htmlFor="username">Имя пользователя</FormLabel>
+              <FormLabel htmlFor="username">{t('signup.form.username')}</FormLabel>
               <FormGroup className="invalid-tooltip">{errors.username}</FormGroup>
             </FormFloating>
 
@@ -87,7 +89,7 @@ const Signup = () => {
                 onChange={handleChange}
                 isInvalid={!!errors.password}
               />
-              <FormLabel htmlFor="password">Пароль</FormLabel>
+              <FormLabel htmlFor="password">{t('signup.form.password')}</FormLabel>
               <FormGroup className="invalid-tooltip">{errors.password}</FormGroup>
             </FormFloating>
 
@@ -101,11 +103,11 @@ const Signup = () => {
                 onChange={handleChange}
                 isInvalid={!!errors.confirmPassword}
               />
-              <FormLabel htmlFor="confirmPassword">Еще раз пароль</FormLabel>
+              <FormLabel htmlFor="confirmPassword">{t('signup.form.confirmPassword')}</FormLabel>
               <FormGroup className="invalid-tooltip">{errors.confirmPassword}</FormGroup>
             </FormFloating>
             <Button type="submit" variant="outline-primary" className="w-100" disabled={isSubmitting}>
-              Зарегаться
+              {t('signup.form.regBtn')}
             </Button>
           </Form>
         )}

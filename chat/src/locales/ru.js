@@ -20,7 +20,7 @@ const ru = {
         passwordShort: 'Минимум 3 символа',
         wrongData: 'Неверные имя пользователя или пароль',
         network: 'Ошибка сети',
-        default: 'Неизвестная ошибка',
+        defaultErr: 'Неизвестная ошибка',
       },
     },
     chat: {
@@ -62,24 +62,23 @@ const ru = {
         },
       },
     },
-    signupPage: {
+    signup: {
       form: {
         header: 'Регистрация',
         username: 'Имя пользователя',
         password: 'Пароль',
-        passwordConfirm: 'Подтвердите пароль',
-        registrationButton: 'Зарегистрироваться',
+        confirmPassword: 'Подтвердите пароль',
+        regBtn: 'Зарегистрироваться',
         image: 'Войти',
       },
       errors: {
-        shortUserName: 'От 3 до 20 символов',
-        longUserName: 'От 3 до 20 символов',
+        username: 'От 3 до 20 символов',
         shortPassword: 'Не менее 6 символов',
         passwordMatch: 'Пароли должны совпадать',
-        requiredField: 'Обязательное поле',
+        required: 'Обязательное поле',
         userExists: 'Такой пользователь уже существует',
         network: 'Ошибка сети',
-        unknown: 'Неизвестная ошибка',
+        defaultErr: 'Неизвестная ошибка',
       },
     },
     notFoundPage: {
