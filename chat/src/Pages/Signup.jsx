@@ -8,9 +8,11 @@ import {
 import SignupComponent from '../components/SignupComponent';
 import registr from '../assets/registr.png';
 import { useSignupMutation } from '../api/userApi';
+// import { setUserAuth } from '../store/slices/authSlice';
 
 const Signup = () => {
-  const [signup] = useSignupMutation();
+  // const dispatch = useDispatch();
+  const [signup, { error }] = useSignupMutation();
   const signupSchema = Yup.object().shape({
     username: Yup.string()
       .min(3, 'less than 3')
@@ -19,9 +21,14 @@ const Signup = () => {
     password: Yup.string().min(6, 'tooShort').required('required'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password')], '').required('required'),
   });
-  const handleSubmit = async ({ username, password }) => {
+  const handleSubmit = async ({ username, password } /* { setSubmitting, setErrors } */) => {
     const { data } = await signup({ username, password });
     console.log(data);
+    console.log(error);
+    // if (isError) console.log(error);
+    // localStorage.setItem('token', data.token);
+    // localStorage.setItem('username', data.username);
+    // dispatch(setUserAuth({ token: data.token, username: data.username }));
   };
   return (
     <SignupComponent img={registr}>
