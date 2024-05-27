@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserAuth } from '../store/slices/authSlice.js';
@@ -11,23 +12,22 @@ import { useLoginMutation } from '../api/userApi.js';
 import LoginComponent from '../components/LoginComponent.jsx';
 import routes from '../routes/routes.js';
 
-const SignupSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(4, 'Минимум 4 буквы')
-    .max(50, 'Максимум 50 букв')
-    .required('Обязательное поле'),
-  password: Yup.string().min(3, 'Минимум 3 буквы').required('Обязательное поле'),
-});
-
 const LoginForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loginReq] = useLoginMutation();
+  const { t } = useTranslation();
   useEffect(() => {
     console.log(location);
   }, [location]);
-
+  const signupSchema = Yup.object().shape({
+    username: Yup.string()
+      .min(4, t('login.errors.usernameShort'))
+      .max(20, t('login.errors.usernameLarge'))
+      .required(t('login.errors.usernameRequired')),
+    password: Yup.string().min(3, t('login.errors.passwordShort')).required(t('login.errors.passwordRequired')),
+  });
   const handleSubmit = async ({ username, password }) => {
     const { data } = await loginReq({ username, password });
     localStorage.setItem('token', data.token);
@@ -41,7 +41,7 @@ const LoginForm = () => {
         username: '',
         password: '',
       }}
-      validationSchema={SignupSchema}
+      validationSchema={signupSchema}
       onSubmit={handleSubmit}
     >
       {({
@@ -51,7 +51,7 @@ const LoginForm = () => {
         touched,
       }) => (
         <Form className="col-12 col-md-6 mt-3 mt-mb-0">
-          <h1 className="text-center mb-4">Войти</h1>
+          <h1 className="text-center mb-4">{t('login.form.header')}</h1>
           <FormFloating className="mb-3">
             <FormControl
               name="username"
@@ -61,7 +61,7 @@ const LoginForm = () => {
               isInvalid={touched.username && !!errors.username}
               autoFocus
             />
-            <FormLabel htmlFor="username">Ваш ник</FormLabel>
+            <FormLabel htmlFor="username">{t('login.form.username')}</FormLabel>
           </FormFloating>
           <FormFloating className="mb-3">
             <FormControl
@@ -72,11 +72,11 @@ const LoginForm = () => {
               onChange={handleChange}
               isInvalid={touched.password && !!errors.password}
             />
-            <FormLabel htmlFor="password">Пароль</FormLabel>
+            <FormLabel htmlFor="password">{t('login.form.password')}</FormLabel>
             <FormGroup className="invalid-tooltip">{errors.password}</FormGroup>
           </FormFloating>
           <Button type="submit" variant="outline-primary" className="w-100">
-            Войти
+            {t('login.form.loginBtn')}
           </Button>
         </Form>
       )}
