@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { setActiveChannel, setChannelModal } from '../store/slices/appSlice.js';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi.js';
 import BasicModal from '../modals/index.js';
-import socket from '../socket.js';
+import { SocketContext } from '../context/socketContext.js';
 
 const Channel = ({ channel, t }) => {
   const dispatch = useDispatch();
@@ -53,6 +53,7 @@ const Channel = ({ channel, t }) => {
 
 const ChannelsComponent = () => {
   const { t } = useTranslation();
+  const socket = useContext(SocketContext);
   const { data: channels = [] } = useGetChannelsQuery();
   const ulClass = `nav flex-column nav-pills nav-fill 
   px-2 mb-3 overflow-auto h-100 d-block`;
@@ -110,7 +111,7 @@ const ChannelsComponent = () => {
       socket.off('renameChannel');
       socket.off('removeChannel');
     };
-  }, [dispatch]);
+  }, [dispatch, socket]);
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">

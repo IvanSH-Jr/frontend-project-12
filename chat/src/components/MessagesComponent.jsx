@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import {
@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetMessagesQuery, useAddMessageMutation, messagesApi } from '../api/messagesApi';
-import socket from '../socket';
+import { SocketContext } from '../context/socketContext.js';
 
 const Message = ({ messages }) => messages.map((message) => (
   <div className="text-break mb-2" key={message.id}>
@@ -19,10 +19,11 @@ const Message = ({ messages }) => messages.map((message) => (
 
 const MessagesComponent = () => {
   const { t } = useTranslation();
+  const socket = useContext(SocketContext);
   const { currentChannelName, currentChannelId } = useSelector((state) => state.app);
   const { username } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { data = [], refetch } = useGetMessagesQuery();
+  const { data = [] } = useGetMessagesQuery();
   const [addMessage] = useAddMessageMutation();
   const handleFormSubmit = async ({ message }, { resetForm }) => {
     const payload = { body: message, channelId: currentChannelId, username };
@@ -42,7 +43,7 @@ const MessagesComponent = () => {
     socket.connect();
     socket.on('newMessage', handleNewMessage);
     return () => socket.off('newMessage');
-  }, [dispatch, refetch]);
+  }, [dispatch, socket]);
   const filteredMessagesByChannelId = data.filter((m) => m.channelId === currentChannelId);
   const numberOfMessages = filteredMessagesByChannelId.length;
   return (
