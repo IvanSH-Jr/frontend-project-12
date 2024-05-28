@@ -4,6 +4,8 @@ import { useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { setActiveChannel, setChannelModal } from '../store/slices/appSlice.js';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi.js';
 import BasicModal from '../modals/index.js';
@@ -79,6 +81,7 @@ const ChannelsComponent = () => {
           (draftChannels) => { draftChannels.push(newChannel); },
         ),
       );
+      toast.success(t('chat.notify.addChannel'));
     };
     const handleRenameChannel = ({ id, name }) => {
       dispatch(
@@ -92,6 +95,7 @@ const ChannelsComponent = () => {
           },
         ),
       );
+      toast.success(t('chat.notify.renameChannel'));
     };
     const handleDeleteChannel = ({ id }) => {
       dispatch(
@@ -101,6 +105,7 @@ const ChannelsComponent = () => {
           (draft) => draft.filter((channel) => channel.id !== id),
         ),
       );
+      toast.success(t('chat.notify.removeChannel'));
     };
     socket.connect();
     socket.on('newChannel', handleNewChannel);
@@ -111,7 +116,7 @@ const ChannelsComponent = () => {
       socket.off('renameChannel');
       socket.off('removeChannel');
     };
-  }, [dispatch, socket]);
+  }, [dispatch, socket, t]);
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -138,6 +143,7 @@ const ChannelsComponent = () => {
         }
       </ul>
       {renderModal()}
+      <ToastContainer />
     </div>
   );
 };
