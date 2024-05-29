@@ -1,5 +1,5 @@
 import {
-  BrowserRouter, Routes, Route, Outlet, Navigate, useLocation,
+  BrowserRouter, Routes, Route, Outlet, Navigate,
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Provider, ErrorBoundary } from '@rollbar/react';
@@ -12,8 +12,6 @@ import AppComponent from './components/AppComponent.jsx';
 import NavComponent from './components/NavComponent.jsx';
 
 const PrivateOutlet = () => {
-  const location = useLocation();
-  console.log(location);
   const { token } = useSelector((state) => state.auth);
   return token ? <Outlet /> : <Navigate to={routes.login()} />;
 };
