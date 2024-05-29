@@ -41,7 +41,7 @@ const init = async (socket) => {
               </SocketProvider>
             </I18nextProvider>
           </React.StrictMode>
-        </ErrorBoundary>  
+        </ErrorBoundary>
       </RollBarProvider>
     </Provider>
   );
