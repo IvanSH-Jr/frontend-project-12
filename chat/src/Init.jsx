@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
+import { Provider as RollBarProvider, ErrorBoundary } from '@rollbar/react';
 import i18next from 'i18next';
 import filter from 'leo-profanity';
 import SocketProvider from './context/socketContext.js';
@@ -20,17 +21,28 @@ const init = async (socket) => {
     },
   });
 
+  const rollbarConfig = {
+    accessToken: process.env.RollBar_Token,
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+    environment: process.env.RollBar_App_Environment,
+  };
+
   filter.loadDictionary('ru');
 
   return (
     <Provider store={store}>
-      <React.StrictMode>
-        <I18nextProvider i18n={i18n}>
-          <SocketProvider socket={socket}>
-            <App />
-          </SocketProvider>
-        </I18nextProvider>
-      </React.StrictMode>
+      <RollBarProvider config={rollbarConfig}>
+        <ErrorBoundary>
+          <React.StrictMode>
+            <I18nextProvider i18n={i18n}>
+              <SocketProvider socket={socket}>
+                <App />
+              </SocketProvider>
+            </I18nextProvider>
+          </React.StrictMode>
+        </ErrorBoundary>  
+      </RollBarProvider>
     </Provider>
   );
 };
