@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Button, FormControl } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import { useRef, useEffect } from 'react';
+import filter from 'leo-profanity';
 import { useEditChannelMutation } from '../api/channelsApi';
 
 const RenameChannel = ({
@@ -18,7 +19,8 @@ const RenameChannel = ({
   const { t } = useTranslation();
   const [editChannel] = useEditChannelMutation();
   const handleFormSubmit = async ({ channelName }) => {
-    await editChannel({ id: modalId, name: channelName });
+    const cleanChannelName = filter.clean(channelName);
+    await editChannel({ id: modalId, name: cleanChannelName });
     onHide();
   };
   return (

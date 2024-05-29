@@ -6,6 +6,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
 import { Formik, Form } from 'formik';
+import filter from 'leo-profanity';
 import { setActiveChannel } from '../store/slices/appSlice';
 import { useAddChannelMutation } from '../api/channelsApi';
 
@@ -18,7 +19,8 @@ const AddChannel = ({
   const { t } = useTranslation();
   const [addChannel] = useAddChannelMutation();
   const handleFormSubmit = async ({ channelName }) => {
-    const body = { name: channelName };
+    const cleanChannelName = filter.clean(channelName);
+    const body = { name: cleanChannelName };
     const { data: { id, name } } = await addChannel(body);
     dispatch(setActiveChannel({ id, name }));
     onHide();

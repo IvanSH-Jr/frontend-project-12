@@ -5,6 +5,7 @@ import {
   FormControl, FormGroup,
 } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import filter from 'leo-profanity';
 import { useGetMessagesQuery, useAddMessageMutation, messagesApi } from '../api/messagesApi';
 import { SocketContext } from '../context/socketContext.js';
 
@@ -26,7 +27,8 @@ const MessagesComponent = () => {
   const { data = [] } = useGetMessagesQuery();
   const [addMessage] = useAddMessageMutation();
   const handleFormSubmit = async ({ message }, { resetForm }) => {
-    const payload = { body: message, channelId: currentChannelId, username };
+    const cleanMessage = filter.clean(message);
+    const payload = { body: cleanMessage, channelId: currentChannelId, username };
     await addMessage(payload);
     resetForm();
   };
