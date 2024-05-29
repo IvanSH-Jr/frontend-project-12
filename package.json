@@ -4,10 +4,10 @@
   "description": "chat, hexlet project",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build --prefix chat",
-    "start": "start-server -s ./chat/build",
+    "build": "npm run build --prefix frontend",
+    "start": "start-server -s ./frontend/build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cd chat && npm ci"
+    "postinstall": "cd frontend && npm ci"
   },
   "author": "Ivan Shadrin",
   "license": "ISC",
