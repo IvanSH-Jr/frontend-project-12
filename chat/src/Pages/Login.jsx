@@ -3,9 +3,8 @@ import {
   FormControl, Button, FormFloating, FormLabel, FormGroup,
 } from 'react-bootstrap';
 import * as Yup from 'yup';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserAuth } from '../store/slices/authSlice.js';
 import { useLoginMutation } from '../api/userApi.js';
@@ -13,14 +12,10 @@ import LoginComponent from '../components/LoginComponent.jsx';
 import routes from '../routes/routes.js';
 
 const LoginForm = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loginReq] = useLoginMutation();
   const { t } = useTranslation();
-  useEffect(() => {
-    console.log(location);
-  }, [location]);
   const signupSchema = Yup.object().shape({
     username: Yup.string()
       .min(4, t('login.errors.usernameShort'))
