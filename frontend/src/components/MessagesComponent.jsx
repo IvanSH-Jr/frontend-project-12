@@ -88,6 +88,7 @@ const MessagesComponent = () => {
                       onChange={handleChange}
                       autoFocus
                       placeholder={t('chat.newMessagePlaceholder')}
+                      aria-label={t('chat.newMessageInput')}
                     />
                     <button type="submit" className="btn btn-group-vertical">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
