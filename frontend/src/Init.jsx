@@ -29,6 +29,7 @@ const init = async (socket) => {
   };
 
   filter.loadDictionary('ru');
+  filter.loadDictionary('en');
 
   return (
     <Provider store={store}>
