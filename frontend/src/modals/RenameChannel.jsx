@@ -39,7 +39,7 @@ const RenameChannel = ({
           }) => (
             <Form>
               <FormControl value={values.channelName} ref={inputRef} name="channelName" onChange={handleChange} id="channelName" isInvalid={!!errors.channelName} />
-              <label htmlFor="name" className="visually-hidden">
+              <label htmlFor="channelName" className="visually-hidden">
                 {t('chat.modals.newChannelName')}
               </label>
               <FormControl.Feedback type="invalid">{errors.channelName}</FormControl.Feedback>
