@@ -32,7 +32,8 @@ const Channel = ({ channel, t }) => {
           variant={`${currentChannelName === channel.name ? 'secondary' : null}`}
           onClick={() => dispatch(setActiveChannel(payload))}
         >
-          {`# ${channel.name}`}
+          <span className="me-1">#</span>
+          {channel.name}
         </Button>
         <Dropdown.Toggle split variant={`${currentChannelName === channel.name ? 'secondary' : null}`} id={`dropdown-split-basic-${channel.id}`} />
         <Dropdown.Menu>
@@ -47,7 +48,8 @@ const Channel = ({ channel, t }) => {
         className="w-100 text-start rounded-0 text-truncate"
         onClick={() => dispatch(setActiveChannel(payload))}
       >
-        {`# ${channel.name}`}
+        <span className="me-1">#</span>
+        {channel.name}
       </Button>
     )
   );
