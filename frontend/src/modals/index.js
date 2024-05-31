@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { setChannelModal } from '../store/slices/appSlice.js';
 import { useGetChannelsQuery } from '../api/channelsApi.js';
@@ -14,6 +15,7 @@ const modals = {
 
 const BasicModal = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { data: channels = [] } = useGetChannelsQuery();
   const currentChannelId = useSelector((state) => state.app.currentChannelId);
   const modalChannelId = useSelector((state) => state.app.modalChannelId);
@@ -21,8 +23,12 @@ const BasicModal = () => {
   const modalType = useSelector((state) => state.app.modalType);
   const channelsNames = channels.map((channel) => channel.name);
   const channelNameSchema = Yup.object().shape({
-    channelName: Yup.string().notOneOf(channelsNames, 'DRY!').min(3, 'less than 3').max(20, 'large than 20')
-      .required('required'),
+    channelName: Yup
+      .string()
+      .notOneOf(channelsNames, t('chat.modals.errors.uniqueName'))
+      .min(3, t('chat.modals.errors.shortChannelName'))
+      .max(20, t('chat.modals.errors.longChannelName'))
+      .required(t('chat.modals.errors.requiredField')),
   });
   const handleCloseModal = () => dispatch(setChannelModal({ id: '', name: '', modalType: '' }));
   const Modal = modals[modalType];
