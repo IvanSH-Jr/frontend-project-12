@@ -23,12 +23,32 @@ const LoginForm = () => {
       .required(t('login.errors.usernameRequired')),
     password: Yup.string().min(3, t('login.errors.passwordShort')).required(t('login.errors.passwordRequired')),
   });
-  const handleSubmit = async ({ username, password }) => {
-    const { data } = await loginReq({ username, password });
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('username', data.username);
-    dispatch(setUserAuth({ token: data.token, username: data.username }));
-    navigate(routes.chat());
+  const handleSubmit = async ({ username, password }, { setErrors }) => {
+    await loginReq({ username, password })
+      .unwrap()
+      .then((data) => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        dispatch(setUserAuth({ token: data.token, username: data.username }));
+        navigate(routes.chat());
+      })
+      .catch((err) => {
+        const { status } = err;
+        switch (status) {
+          case 401: {
+            setErrors({ username: ' ', password: t('login.errors.wrongData') });
+            break;
+          }
+          case 'FETCH_ERROR': {
+            setErrors({ username: ' ', password: t('login.errors.network') });
+            break;
+          }
+          default: {
+            setErrors({ username: ' ', password: t('login.errors.defaultErr') });
+            break;
+          }
+        }
+      });
   };
   return (
     <Formik
