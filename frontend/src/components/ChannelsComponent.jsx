@@ -35,7 +35,9 @@ const Channel = ({ channel, t }) => {
           <span className="me-1">#</span>
           {channel.name}
         </Button>
-        <Dropdown.Toggle split variant={`${currentChannelName === channel.name ? 'secondary' : null}`} id={`dropdown-split-basic-${channel.id}`} />
+        <Dropdown.Toggle split variant={`${currentChannelName === channel.name ? 'secondary' : null}`} id={`dropdown-split-basic-${channel.id}`}>
+          <span className="visually-hidden">{t('chat.manageChannel')}</span>
+        </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => handleDropDown('removing', channel)}>{t('chat.modals.deleteDropMenu')}</Dropdown.Item>
           <Dropdown.Item onClick={() => handleDropDown('renaming', channel)}>{t('chat.modals.renameDropMenu')}</Dropdown.Item>

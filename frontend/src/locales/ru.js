@@ -27,6 +27,7 @@ const ru = {
       mainLink: 'Чат Хекслета',
       logOutBtn: 'Выйти',
       channels: 'Каналы',
+      manageChannel: 'Управление каналом',
       addChannel: 'Создать новый канал',
       newMessagePlaceholder: 'Введите сообщение...',
       sendMessageBtn: 'Отправить',
