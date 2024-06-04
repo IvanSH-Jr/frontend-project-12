@@ -5,7 +5,7 @@ import { Provider as RollBarProvider, ErrorBoundary } from '@rollbar/react';
 import i18next from 'i18next';
 import filter from 'leo-profanity';
 import SocketProvider from './context/socketContext.js';
-import App from './App.jsx';
+import App from './components/App.jsx';
 import store from './store/index.js';
 import resources from './locales/index.js';
 import 'bootstrap/dist/css/bootstrap.min.css';

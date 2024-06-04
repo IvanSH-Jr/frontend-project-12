@@ -1,5 +1,5 @@
-import ChannelsComponent from '../components/ChannelsComponent';
-import MessagesComponent from '../components/MessagesComponent';
+import ChannelsComponent from './ChannelsComponent';
+import MessagesComponent from './MessagesComponent';
 
 const Chat = () => (
   <div className="container h-100 my-4 overflow-hidden rounded shadow">

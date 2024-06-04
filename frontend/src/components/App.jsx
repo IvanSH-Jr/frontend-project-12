@@ -2,13 +2,13 @@ import {
   BrowserRouter, Routes, Route, Outlet, Navigate,
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import routes from './routes/routes.js';
-import NotFound from './Pages/NotFound.jsx';
-import Login from './Pages/Login.jsx';
-import Chat from './Pages/Chat.jsx';
-import Signup from './Pages/Signup.jsx';
-import AppComponent from './components/AppComponent.jsx';
-import NavComponent from './components/NavComponent.jsx';
+import routes from '../routes/routes.js';
+import NotFound from './NotFound.jsx';
+import Login from './Login.jsx';
+import Chat from './Chat.jsx';
+import Signup from './Signup.jsx';
+import AppComponent from './AppComponent.jsx';
+import NavComponent from './NavComponent.jsx';
 
 const PrivateOutlet = () => {
   const { token } = useSelector((state) => state.auth);

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import {
   FormGroup, FormControl, Button, FormFloating, FormLabel,
 } from 'react-bootstrap';
-import SignupComponent from '../components/SignupComponent';
+import SignupComponent from './SignupComponent';
 import registr from '../assets/registr.png';
 import { useSignupMutation } from '../api/userApi';
 import { setUserAuth } from '../store/slices/authSlice';
