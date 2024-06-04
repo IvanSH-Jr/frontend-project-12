@@ -1,13 +1,11 @@
-import { useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import {
   FormControl, FormGroup,
 } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import filter from 'leo-profanity';
-import { useGetMessagesQuery, useAddMessageMutation, messagesApi } from '../api/messagesApi';
-import { SocketContext } from '../context/socketContext.js';
+import { useGetMessagesQuery, useAddMessageMutation } from '../api/messagesApi';
 
 const Message = ({ messages }) => messages.map((message) => (
   <div className="text-break mb-2" key={message.id}>
@@ -20,10 +18,8 @@ const Message = ({ messages }) => messages.map((message) => (
 
 const MessagesComponent = () => {
   const { t } = useTranslation();
-  const socket = useContext(SocketContext);
   const { currentChannelName, currentChannelId } = useSelector((state) => state.app);
   const { username } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const { data = [] } = useGetMessagesQuery();
   const [addMessage] = useAddMessageMutation();
   const handleFormSubmit = async ({ message }, { resetForm }) => {
@@ -32,20 +28,7 @@ const MessagesComponent = () => {
     await addMessage(payload);
     resetForm();
   };
-  useEffect(() => {
-    const handleNewMessage = (newMessage) => {
-      dispatch(
-        messagesApi.util.updateQueryData(
-          'getMessages',
-          undefined,
-          (draftMessages) => { draftMessages.push(newMessage); },
-        ),
-      );
-    };
-    socket.connect();
-    socket.on('newMessage', handleNewMessage);
-    return () => socket.off('newMessage');
-  }, [dispatch, socket]);
+
   const filteredMessagesByChannelId = data.filter((m) => m.channelId === currentChannelId);
   const numberOfMessages = filteredMessagesByChannelId.length;
   return (
