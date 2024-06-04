@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setUserAuth } from '../slices/authSlice.js';
 import { useLoginMutation } from '../api/userApi.js';
 import LoginComponent from './LoginComponent.jsx';
-import routes from '../routes/routes.js';
+import routes from '../routes.js';
 
 const LoginForm = () => {
   const navigate = useNavigate();

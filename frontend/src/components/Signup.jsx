@@ -10,7 +10,7 @@ import SignupComponent from './SignupComponent';
 import registr from '../assets/registr.png';
 import { useSignupMutation } from '../api/userApi';
 import { setUserAuth } from '../slices/authSlice';
-import routes from '../routes/routes';
+import routes from '../routes';
 
 const Signup = () => {
   const { t } = useTranslation();

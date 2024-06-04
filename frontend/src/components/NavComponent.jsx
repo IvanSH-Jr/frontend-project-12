@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserAuth } from '../slices/authSlice';
-import routes from '../routes/routes';
+import routes from '../routes';
 
 const NavComponent = () => {
   const { t } = useTranslation();

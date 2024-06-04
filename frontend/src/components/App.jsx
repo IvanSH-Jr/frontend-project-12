@@ -2,7 +2,7 @@ import {
   BrowserRouter, Routes, Route, Outlet, Navigate,
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import routes from '../routes/routes.js';
+import routes from '../routes.js';
 import NotFound from './NotFound.jsx';
 import Login from './Login.jsx';
 import Chat from './Chat.jsx';

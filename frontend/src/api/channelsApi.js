@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import routes from '../routes/routes';
+import routes from '../routes.js';
 import Header from './setHeader.js';
 
 export const channelsApi = createApi({
