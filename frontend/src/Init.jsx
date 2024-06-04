@@ -6,7 +6,7 @@ import i18next from 'i18next';
 import filter from 'leo-profanity';
 import SocketProvider from './context/socketContext.js';
 import App from './components/App.jsx';
-import store from './store/index.js';
+import store from './slices/index.js';
 import resources from './locales/index.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

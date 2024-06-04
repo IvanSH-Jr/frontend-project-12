@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { setChannelModal } from '../store/slices/appSlice.js';
+import { setChannelModal } from '../slices/appSlice.js';
 import { useGetChannelsQuery } from '../api/channelsApi.js';
 import AddChannel from './AddChannel.jsx';
 import RenameChannel from './RenameChannel.jsx';

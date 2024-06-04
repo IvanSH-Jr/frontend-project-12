@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
 import { Formik, Form } from 'formik';
 import filter from 'leo-profanity';
-import { setActiveChannel } from '../store/slices/appSlice';
+import { setActiveChannel } from '../slices/appSlice';
 import { useAddChannelMutation } from '../api/channelsApi';
 
 const AddChannel = ({

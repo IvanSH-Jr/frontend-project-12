@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Button } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import { useRemoveChannelMutation } from '../api/channelsApi';
-import { setActiveChannel } from '../store/slices/appSlice';
+import { setActiveChannel } from '../slices/appSlice';
 
 const DeleteChannel = ({
   onHide,

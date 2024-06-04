@@ -6,7 +6,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setActiveChannel, setChannelModal } from '../store/slices/appSlice.js';
+import { setActiveChannel, setChannelModal } from '../slices/appSlice.js';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi.js';
 import BasicModal from '../modals/index.js';
 import { SocketContext } from '../context/socketContext.js';

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUserAuth } from '../store/slices/authSlice.js';
+import { setUserAuth } from '../slices/authSlice.js';
 import { useLoginMutation } from '../api/userApi.js';
 import LoginComponent from './LoginComponent.jsx';
 import routes from '../routes/routes.js';
