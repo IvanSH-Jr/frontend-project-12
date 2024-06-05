@@ -12,8 +12,8 @@ import App from './components/App.jsx';
 import store from './slices/index.js';
 import resources from './locales/index.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-const Init = async ({ connect, on, off }) => {
+/* eslint-disable react/destructuring-assignment */
+const Init = async (socket) => {
   const i18n = i18next.createInstance();
   await i18n.init({
     lng: 'ru',
@@ -42,7 +42,7 @@ const Init = async ({ connect, on, off }) => {
         (draftMessages) => { draftMessages.push(newMessage); },
       ),
     );
-    off('newMessage');
+    socket.off('newMessage');
   };
   const handleNewChannel = (newChannel) => {
     store.dispatch(
@@ -53,7 +53,7 @@ const Init = async ({ connect, on, off }) => {
       ),
     );
     toast.success(i18n.t('chat.notify.addChannel'));
-    off('newChannel');
+    socket.off('newChannel');
   };
   const handleRenameChannel = ({ id, name }) => {
     store.dispatch(
@@ -68,7 +68,7 @@ const Init = async ({ connect, on, off }) => {
       ),
     );
     toast.success(i18n.t('chat.notify.renameChannel'));
-    off('renameChannel');
+    socket.off('renameChannel');
   };
   const handleDeleteChannel = ({ id }) => {
     store.dispatch(
@@ -79,13 +79,13 @@ const Init = async ({ connect, on, off }) => {
       ),
     );
     toast.success(i18n.t('chat.notify.removeChannel'));
-    off('removeChannel');
+    socket.off('removeChannel');
   };
-  connect();
-  on('newMessage', handleNewMessage);
-  on('newChannel', handleNewChannel);
-  on('renameChannel', handleRenameChannel);
-  on('removeChannel', handleDeleteChannel);
+  socket.connect();
+  socket.on('newMessage', handleNewMessage);
+  socket.on('newChannel', handleNewChannel);
+  socket.on('renameChannel', handleRenameChannel);
+  socket.on('removeChannel', handleDeleteChannel);
 
   return (
     <Provider store={store}>
