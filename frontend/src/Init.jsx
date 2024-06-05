@@ -42,7 +42,6 @@ const Init = async (socket) => {
         (draftMessages) => { draftMessages.push(newMessage); },
       ),
     );
-    socket.off('newMessage');
   };
   const handleNewChannel = (newChannel) => {
     store.dispatch(
@@ -53,7 +52,6 @@ const Init = async (socket) => {
       ),
     );
     toast.success(i18n.t('chat.notify.addChannel'));
-    socket.off('newChannel');
   };
   const handleRenameChannel = ({ id, name }) => {
     store.dispatch(
@@ -68,7 +66,6 @@ const Init = async (socket) => {
       ),
     );
     toast.success(i18n.t('chat.notify.renameChannel'));
-    socket.off('renameChannel');
   };
   const handleDeleteChannel = ({ id }) => {
     store.dispatch(
@@ -79,7 +76,6 @@ const Init = async (socket) => {
       ),
     );
     toast.success(i18n.t('chat.notify.removeChannel'));
-    socket.off('removeChannel');
   };
   socket.connect();
   socket.on('newMessage', handleNewMessage);
