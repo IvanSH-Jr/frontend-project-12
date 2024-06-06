@@ -5,6 +5,9 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/IvanSH-Jr/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/IvanSH-Jr/frontend-project-12/actions)
 
+### CodeClimate
+[![Maintainability](https://api.codeclimate.com/v1/badges/799ac2383b173efd4523/maintainability)](https://codeclimate.com/github/IvanSH-Jr/frontend-project-12/maintainability)
+
 ## Установка
 
 ```
